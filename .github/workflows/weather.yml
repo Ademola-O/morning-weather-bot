@@ -1,16 +1,28 @@
+# .github/workflows/weather.yml
+# Tells GitHub to run weather.js every morning and save the result
+# back into the repo.
+
+# The name shown in the Actions tab on GitHub.
 name: Morning weather
 
+# WHEN should this run? (the triggers)
 on:
   schedule:
     - cron: "0 7 * * *"   # every day at 07:00 UTC
   workflow_dispatch:       # lets you run it manually
 
+# WHAT is the job allowed to do?
+# "contents: write" lets it push changes back to this repo.
+# Without it, the final push step would be refused.
 permissions:
   contents: write
 
+# WHAT should it do? A workflow is made of one or more jobs.
 jobs:
   report:
     runs-on: ubuntu-latest
+    # The steps run in order. If any step fails, the run stops and
+    # GitHub shows a red cross.
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

@@ -1,5 +1,5 @@
 # Morning weather report
-Date: 2026-11-22
-High: 8.9°C
-Low: 5.8°C
+Date: 2026-11-23
+High: 7.7°C
+Low: 3.2°C
 Rain: 0 mm

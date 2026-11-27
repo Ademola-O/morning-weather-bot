@@ -1,6 +1,8 @@
 # Morning Weather Bot
 
-A small automation that fetches London's weather forecast every morning and saves it as a report in this repo. A scheduled GitHub Actions workflow runs a Node.js script, which calls a free weather API, writes the result to `weather.md`, and commits it back automatically. Nothing to host and no API key needed.
+A small automation that fetches London's weather forecast every morning and saves it as a report in this repo. A scheduled GitHub Actions workflow runs a Node.js script, which calls a free weather API, writes the result to `weather.md`, and commits it back automatically. A small web page then shows the latest report. Nothing to host yourself and no API key needed.
+
+**Live page:** <https://ademola-o.github.io/morning-weather-bot/>
 
 **Latest report:** [`weather.md`](weather.md)
 
@@ -32,8 +34,18 @@ morning-weather-bot/
 ├── .github/
 │   └── workflows/
 │       └── weather.yml    The schedule and the steps GitHub runs
-├── weather.js             Fetches the forecast and writes the report
+├── css/
+│   └── style.css          Styling for the web page, with an automatic dark theme
+├── js/
+│   ├── main.js            Fetches weather.md and fills in the page
+│   ├── report.js          Reads and formats the report (no page code, fully tested)
+│   └── package.json       Marks the files in this folder as ES modules
+├── tests/
+│   └── report.test.mjs    Automated tests for report.js
+├── index.html             The web page (structure only)
+├── weather.js             The bot: fetches the forecast and writes the report
 ├── weather.md             The latest report (updated automatically)
+├── .nojekyll              Tells GitHub Pages to serve the files as they are
 └── README.md
 ```
 
@@ -47,6 +59,24 @@ morning-weather-bot/
 node weather.js
 ```
 
+## The web page
+
+`index.html` is hosted with GitHub Pages and shows the latest report as a card with the date, the high, the low and the rain. It reads `weather.md` each time it loads, so it updates itself whenever the bot commits a new report. If the report is two or more days old, the page says so, in case the bot has stopped running.
+
+- It follows the visitor's light or dark setting, works on phones, and shows a clear message if the report can't be loaded.
+- It needs a web server to read `weather.md`, so opening `index.html` by double-clicking won't show any data. Use the live page, or the VS Code **Live Server** extension.
+- To host it: **Settings → Pages → Deploy from a branch → `main` → `/ (root)`**, and keep the `.nojekyll` file in the main folder.
+
+## Running the tests
+
+Needs [Node.js](https://nodejs.org) 18 or newer. Nothing to install.
+
+```
+node --test
+```
+
+The tests cover reading the report, handling bad or incomplete input, validating dates, and working out how old a report is, including across the clocks changing.
+
 ## Customising it
 
 - **Another city:** change `LAT` and `LON` at the top of `weather.js`, and the `timezone` value in the URL.
@@ -59,6 +89,11 @@ node weather.js
 - **Least privilege.** The workflow is only given `contents: write`, the one permission it needs to push the report, and nothing else.
 - **No secrets.** Open-Meteo is free for non-commercial use and needs no API key, so there is nothing sensitive in the repo. If a key were needed, it would go in GitHub Secrets, never in the code.
 - **Safe to run repeatedly.** `git commit ... || echo "No changes"` means a day with no changes doesn't fail the run, and `git pull --rebase` before the push avoids rejected pushes.
+- **Logic is separate from the page.** `js/report.js` has no page code in it, so it can be tested on its own. `js/main.js` connects it to the page.
+- **The page is honest about old data.** If the report is two or more days old, it says so instead of presenting it as fresh.
+- **User-facing text is added with `textContent`,** never `innerHTML`, so nothing in the report file can run as code.
+- **ES modules only where needed.** `js/package.json` makes the files in `js/` modules without affecting `weather.js`, which the bot runs as a normal Node.js script.
+- **`.nojekyll`** stops GitHub Pages converting `weather.md` into an HTML page, so the page can read the raw file.
 - **Manual trigger.** `workflow_dispatch` adds a Run button, so changes can be tested without waiting until morning.
 
 ## Known limitations
@@ -73,7 +108,7 @@ node weather.js
 - [ ] Send the report by email, Telegram or Discord
 - [ ] Add wind speed and a weather description
 - [ ] Choose the city from a setting instead of editing the code
-- [ ] Show the latest report on my portfolio site
+- [ ] Link the live page from my portfolio site
 - [ ] Update the workflow to a newer Node.js version
 
 ## What I learned
@@ -85,6 +120,10 @@ node weather.js
 - Writing a GitHub Actions workflow: triggers, permissions, jobs and steps
 - Giving automation only the permissions it needs
 - Committing to a repo from inside an automated job
+- Reading a file from a web page with `fetch`, and handling failures
+- Splitting code into ES modules, with logic kept separate from the page
+- Writing automated tests with Node's built-in test runner
+- Hosting a static site with GitHub Pages
 
 ## Author
 

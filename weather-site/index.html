@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="London's weather forecast, updated every morning by a GitHub Actions bot.">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#eef4ff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0b1220" media="(prefers-color-scheme: dark)">
+    <title>Morning Weather Bot</title>
+
+    <!-- A cloud emoji as the tab icon, built into the page so the browser never asks for a missing favicon file -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9B%85%3C/text%3E%3C/svg%3E">
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- type="module" lets main.js import report.js. Module scripts wait for the page to load automatically. -->
+    <script type="module" src="js/main.js"></script>
+</head>
+
+<body>
+
+    <main class="card">
+
+        <p class="label">Morning weather report</p>
+        <h1>London</h1>
+        <p class="date" id="date">Loading…</p>
+
+        <!-- The three numbers. JavaScript fills these in from weather.md. -->
+        <div class="tiles">
+            <div class="tile">
+                <div class="name">High</div>
+                <div class="value" id="high">–</div>
+            </div>
+            <div class="tile">
+                <div class="name">Low</div>
+                <div class="value" id="low">–</div>
+            </div>
+            <div class="tile">
+                <div class="name">Rain</div>
+                <div class="value" id="rain">–</div>
+            </div>
+        </div>
+
+        <!-- role="status" makes screen readers announce a message if one appears -->
+        <p class="status" id="status" role="status"></p>
+
+        <!-- Shown only if the visitor's browser has JavaScript switched off -->
+        <noscript><p class="status">This page needs JavaScript to show the latest report.</p></noscript>
+
+        <p class="footer">
+            Updated automatically every morning at 07:00 UTC by a GitHub Actions bot.
+            Forecast data from <a href="https://open-meteo.com">Open-Meteo</a>.<br>
+            <a href="https://github.com/Ademola-O/morning-weather-bot">View the code on GitHub</a>
+        </p>
+
+    </main>
+
+</body>
+</html>

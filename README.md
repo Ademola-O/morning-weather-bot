@@ -6,6 +6,9 @@ A small automation that fetches London's weather forecast every morning and save
 
 **Latest report:** [`weather.md`](weather.md)
 
+##Image of bot
+<img src="weatherBot.png">
+
 ## What it produces
 
 Every day the script overwrites `weather.md` with a short report in this format (example values):

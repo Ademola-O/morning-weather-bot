@@ -8,7 +8,7 @@ name: Morning weather
 # WHEN should this run? (the triggers)
 on:
   schedule:
-    - cron: "0 7 * * *"   # every day at 07:00 UTC
+    - cron: "17 5 * * *"   # every day at around 05:17 UTC so even if delayed by gitHub, will still be a morning report. 
   workflow_dispatch:       # lets you run it manually
 
 # WHAT is the job allowed to do?
